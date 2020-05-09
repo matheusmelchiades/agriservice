@@ -9,8 +9,11 @@ const app = express()
 /**
  * MIDDLEWARES
  */
+if (process.env.NODE_ENV !== 'test') {
+    app.use(morgan('dev'))
+}
+
 app.use(express.json())
-app.use(morgan('dev'))
 app.use(routes)
 
 function run() {

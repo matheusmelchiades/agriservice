@@ -1,0 +1,15 @@
+const mongoose = require('mongoose')
+
+const SpecieSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    description: {
+        type: String,
+        required: true
+    }
+})
+
+module.exports = mongoose.model('Specie', SpecieSchema, 'species')
