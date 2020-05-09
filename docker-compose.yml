@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  species:
+    container_name: species
+    build: ./species
+    restart: always
+    env_file: ./species/.env
+    ports:
+      - "5001:5001"
+    depends_on:
+      - species_db
+
+  species_db:
+    image: mongo
+    container_name: species_db
+    restart: always
+    env_file: ./species/.env
+    ports:
+      - "36015:27017"
+    volumes:
+      - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+    logging:
+      driver: none
