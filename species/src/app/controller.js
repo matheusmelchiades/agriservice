@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const model = require('./model')
 
-module.exports.get = (_, response) => {
+module.exports.main = (_, response) => {
 
     try {
 
@@ -27,6 +27,28 @@ module.exports.post = async (request, response) => {
 
         if (err instanceof mongoose.Error) {
             return response.status(402).json({ error: 'Error to create a specie' })
+        }
+
+        return response.status(500).json({ error: err.message })
+    }
+}
+
+module.exports.get = async (request, response) => {
+    try {
+        const { page = 1, limit = 10 } = request.query
+
+        const skipper = (page - 1) * limit
+        const count = await model.count()
+        const species = await model.find()
+            .skip(skipper >= 0 ? skipper : 0)
+            .limit(limit)
+
+        return response.json({ count, data: species || [] })
+
+    } catch (err) {
+
+        if (err instanceof mongoose.Error) {
+            return response.status(400).json({ error: 'Error to get species' })
         }
 
         return response.status(500).json({ error: err.message })
