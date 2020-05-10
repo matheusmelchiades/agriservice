@@ -22,3 +22,25 @@ services:
       - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
     logging:
       driver: none
+
+  trees:
+    container_name: trees
+    build: ./trees
+    restart: always
+    env_file: ./trees/.env
+    ports:
+      - "5002:5002"
+    depends_on:
+      - trees_db
+
+  trees_db:
+    image: mongo
+    container_name: trees_db
+    restart: always
+    env_file: ./trees/.env
+    ports:
+      - "36016:27017"
+    volumes:
+      - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+    logging:
+      driver: none
