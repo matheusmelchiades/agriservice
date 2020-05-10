@@ -77,6 +77,28 @@ module.exports.put = async (request, response) => {
     }
 }
 
+module.exports.delete = async (request, response) => {
+
+    try {
+
+        const { id } = request.params
+
+        const deleted = await model.findOneAndDelete({ _id: id })
+
+        if (!deleted) return response.status(400).json({ error: 'Not found grove' })
+
+        return response.json({ message: 'Deleted with success' })
+
+    } catch (err) {
+
+        if (err instanceof mongoose.Error) {
+            return response.status(402).json({ error: 'Error to delete a grove' })
+        }
+
+        return response.status(500).json({ error: 'Error internaval' })
+    }
+}
+
 function factoryToUpdate(payload) {
 
     return JSON.parse(JSON.stringify({

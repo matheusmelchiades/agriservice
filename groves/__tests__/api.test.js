@@ -132,4 +132,43 @@ describe('API', () => {
         expect(response.body).toHaveProperty('error', 'Error to update groves')
         done()
     })
+
+    it('It should delete a grove with success', async done => {
+        const grove = mocks.grove()
+
+        mockingoose(model).toReturn({}, 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/groves/${grove._id}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('message', 'Deleted with success')
+        done()
+    })
+
+    it('It should report if not found a grove to delete', async done => {
+        const idFake = mongoose.Types.ObjectId()
+
+        mockingoose(model).toReturn(null, 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/groves/${idFake}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty('error', 'Not found grove')
+        done()
+    })
+
+    it('It should report error to delete a grove', async done => {
+        const grove = mocks.grove()
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/groves/${grove._id}`)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to delete a grove')
+        done()
+    })
 })
