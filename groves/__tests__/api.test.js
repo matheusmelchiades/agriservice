@@ -59,4 +59,45 @@ describe('API', () => {
         expect(response.body).toHaveProperty('error', 'Error to create a grove')
         done()
     })
+
+    it('It should return all data about groves', async done => {
+        const groves = mocks.groves()
+        const pagination = {
+            limit: 10,
+            page: 1
+        }
+
+        const skipper = (pagination.page - 1) * pagination.limit
+        const mockResponse = groves.slice(skipper >= 0 ? skipper : 0, pagination.limit)
+
+        mockingoose(model).toReturn(mockResponse, 'find')
+        mockingoose(model).toReturn(groves.length, 'count')
+
+        const response = await request(app)
+            .get('/groves')
+            .query(pagination)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('count', groves.length)
+        expect(response.body).toHaveProperty('data')
+        expect(response.body.data.length).toBe(mockResponse.length)
+        done()
+    })
+
+    it('It should report error on get all data about groves', async done => {
+        const pagination = {
+            limit: 10,
+            page: 1
+        }
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'find')
+
+        const response = await request(app)
+            .get('/groves')
+            .query(pagination)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to get groves')
+        done()
+    })
 })
