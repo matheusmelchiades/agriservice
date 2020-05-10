@@ -137,4 +137,43 @@ describe('API', () => {
         expect(response.body).toHaveProperty('error', 'Error to update tree')
         done()
     })
+
+    it('It should delete a tree with success', async done => {
+        const tree = mocks.tree()
+
+        mockingoose(model).toReturn({}, 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/trees/${tree._id}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('message', 'Deleted with success')
+        done()
+    })
+
+    it('It should report if not found a tree to delete', async done => {
+        const idFake = mongoose.Types.ObjectId()
+
+        mockingoose(model).toReturn(null, 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/trees/${idFake}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty('error', 'Not found tree')
+        done()
+    })
+
+    it('It should report error to delete a tree', async done => {
+        const tree = mocks.tree()
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/trees/${tree._id}`)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to delete a tree')
+        done()
+    })
 })
