@@ -6,5 +6,6 @@ const handler = require('./controller')
  * Routes
  */
 routes.get('/', handler.main)
+routes.post('/groves', handler.post)
 
 module.exports = routes
