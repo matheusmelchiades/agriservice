@@ -92,7 +92,7 @@ describe('API', () => {
             .get('/species')
             .query(pagination)
 
-        expect(response.status).toBe(400)
+        expect(response.status).toBe(402)
         expect(response.body).toHaveProperty('error', 'Error to get species')
         done()
     })
@@ -124,8 +124,47 @@ describe('API', () => {
             .put('/species')
             .send(specieUpdate)
 
-        expect(response.status).toBe(400)
+        expect(response.status).toBe(402)
         expect(response.body).toHaveProperty('error', 'Error to update species')
+        done()
+    })
+
+    it('It should delete a specie with success', async done => {
+        const specie = mocks.specie()
+
+        mockingoose(model).toReturn({}, 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/species/${specie._id}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('message', 'Deleted with success')
+        done()
+    })
+
+    it('It should report if not found a spect to delete', async done => {
+        const idFake = mongoose.Types.ObjectId()
+
+        mockingoose(model).toReturn(null, 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/species/${idFake}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty('error', 'Not found specie')
+        done()
+    })
+
+    it('It should report error to delete a specie', async done => {
+        const specie = mocks.specie()
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/species/${specie._id}`)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to delete a specie')
         done()
     })
 })

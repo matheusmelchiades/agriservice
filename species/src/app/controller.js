@@ -29,7 +29,7 @@ module.exports.post = async (request, response) => {
             return response.status(402).json({ error: 'Error to create a specie' })
         }
 
-        return response.status(500).json({ error: err.message })
+        return response.status(500).json({ error: 'Error internaval' })
     }
 }
 
@@ -50,10 +50,10 @@ module.exports.get = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(400).json({ error: 'Error to get species' })
+            return response.status(402).json({ error: 'Error to get species' })
         }
 
-        return response.status(500).json({ error: err.message })
+        return response.status(500).json({ error: 'Error internaval' })
     }
 }
 
@@ -70,9 +70,31 @@ module.exports.put = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(400).json({ error: 'Error to update species' })
+            return response.status(402).json({ error: 'Error to update species' })
         }
 
-        return response.status(500).json({ error: err.message })
+        return response.status(500).json({ error: 'Error internaval' })
+    }
+}
+
+module.exports.delete = async (request, response) => {
+
+    try {
+
+        const { id } = request.params
+
+        const deleted = await model.findOneAndDelete({ _id: id })
+
+        if (!deleted) return response.status(400).json({ error: 'Not found specie' })
+
+        return response.json({ message: 'Deleted with success' })
+
+    } catch (err) {
+
+        if (err instanceof mongoose.Error) {
+            return response.status(402).json({ error: 'Error to delete a specie' })
+        }
+
+        return response.status(500).json({ error: 'Error internaval' })
     }
 }
