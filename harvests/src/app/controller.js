@@ -78,3 +78,25 @@ module.exports.put = async (request, response) => {
         return response.status(500).json({ error: 'Error internaval' })
     }
 }
+
+module.exports.delete = async (request, response) => {
+
+    try {
+
+        const { id } = request.params
+
+        const deleted = await model.findOneAndDelete({ _id: id })
+
+        if (!deleted) return response.status(400).json({ error: 'Harvest not found!' })
+
+        return response.json({ message: 'Harvest deleted with success!' })
+
+    } catch (err) {
+
+        if (err instanceof mongoose.Error) {
+            return response.status(402).json({ error: 'Error to delete a harvest' })
+        }
+
+        return response.status(500).json({ error: 'Error internaval' })
+    }
+}

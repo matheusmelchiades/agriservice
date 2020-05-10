@@ -165,4 +165,43 @@ describe('API', () => {
         expect(response.body).toHaveProperty('error', 'Error to update harvests')
         done()
     })
+
+    it('It should delete a harvest with success', async done => {
+        const harvest = mocks.harvest()
+
+        mockingoose(model).toReturn({}, 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/harvests/${harvest._id}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('message', 'Harvest deleted with success!')
+        done()
+    })
+
+    it('It should report if not found a harvest to delete', async done => {
+        const idFake = mongoose.Types.ObjectId()
+
+        mockingoose(model).toReturn(null, 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/harvests/${idFake}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty('error', 'Harvest not found!')
+        done()
+    })
+
+    it('It should report error to delete a harvest', async done => {
+        const harvest = mocks.harvest()
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'findOneAndDelete')
+
+        const response = await request(app)
+            .delete(`/harvests/${harvest._id}`)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to delete a harvest')
+        done()
+    })
 })
