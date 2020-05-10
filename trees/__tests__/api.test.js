@@ -55,4 +55,54 @@ describe('API', () => {
         expect(response.body).toHaveProperty('error', 'Error to create a tree')
         done()
     })
+
+    it('It should return all data about species', async done => {
+        const trees = mocks.trees()
+        const pagination = {
+            limit: 10,
+            page: 1
+        }
+
+        const skipper = (pagination.page - 1) * pagination.limit
+        const mockResponse = trees.slice(skipper >= 0 ? skipper : 0, pagination.limit)
+
+        mockingoose(model).toReturn(mockResponse, 'find')
+        mockingoose(model).toReturn(trees.length, 'count')
+
+        const response = await request(app)
+            .get('/trees')
+            .query(pagination)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('count', trees.length)
+        expect(response.body).toHaveProperty('data')
+        expect(response.body.data.length).toBe(mockResponse.length)
+
+        response.body.data.forEach(tree => {
+            expect(tree).toHaveProperty('_id')
+            expect(tree).toHaveProperty('name', tree.name)
+            expect(tree).toHaveProperty('description', tree.description)
+            expect(tree).toHaveProperty('born', tree.born)
+            expect(tree).toHaveProperty('specie', tree.specie)
+        })
+
+        done()
+    })
+
+    it('It should report error on get all data about species', async done => {
+        const pagination = {
+            limit: 10,
+            page: 1
+        }
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'find')
+
+        const response = await request(app)
+            .get('/trees')
+            .query(pagination)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to get trees')
+        done()
+    })
 })
