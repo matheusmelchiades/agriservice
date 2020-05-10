@@ -8,5 +8,6 @@ const handler = require('./controller')
 routes.get('/', handler.main)
 routes.get('/harvests', handler.get)
 routes.post('/harvests', handler.post)
+routes.put('/harvests/:id', handler.put)
 
 module.exports = routes

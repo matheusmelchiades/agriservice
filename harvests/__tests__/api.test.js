@@ -112,4 +112,57 @@ describe('API', () => {
         expect(response.body).toHaveProperty('error', 'Error to get harvests')
         done()
     })
+
+    it('It should update a harvest with success', async done => {
+        const harvest = mocks.harvest()
+        const harvestUpdate = {
+            grossWeight: 192.22,
+            about: 'Donec eu metus vitae leo aliquet sollicitudin.'
+        }
+
+        mockingoose(model).toReturn({ ...harvest, ...harvestUpdate }, 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put(`/harvests/${harvest._id}`)
+            .send(harvestUpdate)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('message', 'Harvest updated with success!')
+        done()
+    })
+
+    it('It should report an error if not found harvest', async done => {
+        const harvestUpdate = {
+            grossWeight: 192.22,
+            about: 'Donec eu metus vitae leo aliquet sollicitudin.'
+        }
+
+        mockingoose(model).toReturn(null, 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put(`/harvests/${mongoose.Types.ObjectId()}`)
+            .send(harvestUpdate)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Harvest not found!')
+        done()
+    })
+
+    it('It should report an Error on update a invalid payload', async done => {
+        const harvest = mocks.harvest()
+        const harvestUpdate = {
+            grossWeight: 192.22,
+            about: 'Donec eu metus vitae leo aliquet sollicitudin.'
+        }
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put(`/harvests/${harvest._id}`)
+            .send(harvestUpdate)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to update harvests')
+        done()
+    })
 })
