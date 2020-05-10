@@ -44,3 +44,25 @@ services:
       - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
     logging:
       driver: none
+
+  groves:
+    container_name: groves
+    build: ./groves
+    restart: always
+    env_file: ./groves/.env
+    ports:
+      - "5003:5003"
+    depends_on:
+      - groves_db
+
+  groves_db:
+    image: mongo
+    container_name: groves_db
+    restart: always
+    env_file: ./groves/.env
+    ports:
+      - "36017:27017"
+    volumes:
+      - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+    logging:
+      driver: none

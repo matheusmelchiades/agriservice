@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const SpecieSchema = new mongoose.Schema({
+const TreeSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -19,4 +19,4 @@ const SpecieSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Trees', SpecieSchema, 'trees')
+module.exports = mongoose.model('Trees', TreeSchema, 'trees')
