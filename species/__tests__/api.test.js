@@ -96,4 +96,36 @@ describe('API', () => {
         expect(response.body).toHaveProperty('error', 'Error to get species')
         done()
     })
+
+    it('It should update a specie with success', async done => {
+        const specie = mocks.specie()
+        const specieUpdate = { ...specie, name: 'Gorse' }
+
+        mockingoose(model).toReturn(specieUpdate, 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put('/species')
+            .send(specieUpdate)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('_id', specieUpdate._id)
+        expect(response.body).toHaveProperty('name', specieUpdate.name)
+        expect(response.body).toHaveProperty('description', specieUpdate.description)
+        done()
+    })
+
+    it('It should report an Error on update a invalid payload', async done => {
+        const specie = mocks.specie()
+        const specieUpdate = { ...specie, name: 'Gorse' }
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put('/species')
+            .send(specieUpdate)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty('error', 'Error to update species')
+        done()
+    })
 })

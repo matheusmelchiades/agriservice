@@ -34,7 +34,9 @@ module.exports.post = async (request, response) => {
 }
 
 module.exports.get = async (request, response) => {
+
     try {
+
         const { page = 1, limit = 10 } = request.query
 
         const skipper = (page - 1) * limit
@@ -49,6 +51,26 @@ module.exports.get = async (request, response) => {
 
         if (err instanceof mongoose.Error) {
             return response.status(400).json({ error: 'Error to get species' })
+        }
+
+        return response.status(500).json({ error: err.message })
+    }
+}
+
+module.exports.put = async (request, response) => {
+
+    try {
+
+        const payload = request.body
+
+        const specie = await model.findByIdAndUpdate({ _id: payload._id }, payload)
+
+        return response.json(specie)
+
+    } catch (err) {
+
+        if (err instanceof mongoose.Error) {
+            return response.status(400).json({ error: 'Error to update species' })
         }
 
         return response.status(500).json({ error: err.message })

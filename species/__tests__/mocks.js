@@ -1,6 +1,7 @@
 module.exports.specie = assign => {
 
     return {
+        _id: '507f191e810c19729de860ea',
         name: 'Abies alba',
         description: 'The leaves are rigid, needle-like and short, only 1.2-3 cm long.',
         ...assign
