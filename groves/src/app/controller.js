@@ -19,9 +19,9 @@ module.exports.post = async (request, response) => {
 
         const payload = request.body
 
-        const specie = await model.create(payload)
+        const grove = await model.create(payload)
 
-        return response.json(specie)
+        return response.json(grove)
 
     } catch (err) {
 

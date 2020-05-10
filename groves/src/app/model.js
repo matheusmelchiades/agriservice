@@ -13,4 +13,4 @@ const GroveSchema = new mongoose.Schema({
     trees: [mongoose.SchemaTypes.ObjectId]
 })
 
-module.exports = mongoose.model('Specie', GroveSchema, 'species')
+module.exports = mongoose.model('Grove', GroveSchema, 'groves')
