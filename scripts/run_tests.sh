@@ -12,9 +12,18 @@ log_service_name()
   echo ""
 }
 
-docker-compose up --build -d species
+docker-compose up --build -d species trees groves harvests
 
 log_service_name Species starting...
 docker exec -it species yarn test
 
-docker-compose stop species
+log_service_name Trees starting...
+docker exec -it trees yarn test
+
+log_service_name Groves starting...
+docker exec -it groves yarn test
+
+log_service_name Harvests starting...
+docker exec -it harvests yarn test
+
+docker-compose stop species trees groves harvests

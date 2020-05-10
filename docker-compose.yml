@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+  # SPECIES SERVICES
   species:
     container_name: species
     build: ./species
@@ -23,6 +24,7 @@ services:
     logging:
       driver: none
 
+  # TREES SERVICES
   trees:
     container_name: trees
     build: ./trees
@@ -45,6 +47,7 @@ services:
     logging:
       driver: none
 
+  # GROVES SERVICES
   groves:
     container_name: groves
     build: ./groves
@@ -62,6 +65,29 @@ services:
     env_file: ./groves/.env
     ports:
       - "36017:27017"
+    volumes:
+      - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+    logging:
+      driver: none
+
+  # HARVESTS SERVICES
+  harvests:
+    container_name: harvests
+    build: ./harvests
+    restart: always
+    env_file: ./harvests/.env
+    ports:
+      - "5004:5004"
+    depends_on:
+      - harvests_db
+
+  harvests_db:
+    image: mongo
+    container_name: harvests_db
+    restart: always
+    env_file: ./harvests/.env
+    ports:
+      - "36018:27017"
     volumes:
       - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
     logging:
