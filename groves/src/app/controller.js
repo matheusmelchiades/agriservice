@@ -56,3 +56,31 @@ module.exports.get = async (request, response) => {
         return response.status(500).json({ error: 'Error internaval' })
     }
 }
+
+module.exports.put = async (request, response) => {
+
+    try {
+
+        const payload = request.body
+
+        const grove = await model.findByIdAndUpdate({ _id: payload._id }, factoryToUpdate(payload))
+
+        return response.json(grove)
+
+    } catch (err) {
+
+        if (err instanceof mongoose.Error) {
+            return response.status(402).json({ error: 'Error to update groves' })
+        }
+
+        return response.status(500).json({ error: 'Error internaval' })
+    }
+}
+
+function factoryToUpdate(payload) {
+
+    return JSON.parse(JSON.stringify({
+        name: payload.name,
+        description: payload.description
+    }))
+}

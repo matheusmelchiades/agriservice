@@ -100,4 +100,36 @@ describe('API', () => {
         expect(response.body).toHaveProperty('error', 'Error to get groves')
         done()
     })
+
+    it('It should update a grove with success', async done => {
+        const grove = mocks.grove()
+        const groveUpdate = { ...grove, name: 'Gorse' }
+
+        mockingoose(model).toReturn(groveUpdate, 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put('/groves')
+            .send(groveUpdate)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('_id', groveUpdate._id)
+        expect(response.body).toHaveProperty('name', groveUpdate.name)
+        expect(response.body).toHaveProperty('description', groveUpdate.description)
+        done()
+    })
+
+    it('It should report an Error on update a grove with invalid payload', async done => {
+        const grove = mocks.grove()
+        const groveUpdate = { ...grove, name: 'Gorse' }
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put('/groves')
+            .send(groveUpdate)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to update groves')
+        done()
+    })
 })
