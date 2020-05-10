@@ -56,7 +56,7 @@ describe('API', () => {
         done()
     })
 
-    it('It should return all data about species', async done => {
+    it('It should return all data about tree', async done => {
         const trees = mocks.trees()
         const pagination = {
             limit: 10,
@@ -89,7 +89,7 @@ describe('API', () => {
         done()
     })
 
-    it('It should report error on get all data about species', async done => {
+    it('It should report error on get all data about tree', async done => {
         const pagination = {
             limit: 10,
             page: 1
@@ -103,6 +103,38 @@ describe('API', () => {
 
         expect(response.status).toBe(402)
         expect(response.body).toHaveProperty('error', 'Error to get trees')
+        done()
+    })
+
+    it('It should update a tree with success', async done => {
+        const tree = mocks.tree()
+        const treeUpdate = { ...tree, name: 'TESTE' }
+
+        mockingoose(model).toReturn(treeUpdate, 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put('/trees')
+            .send(treeUpdate)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('_id', treeUpdate._id)
+        expect(response.body).toHaveProperty('name', treeUpdate.name)
+        expect(response.body).toHaveProperty('description', treeUpdate.description)
+        done()
+    })
+
+    it('It should report an Error on update a invalid payload', async done => {
+        const tree = mocks.tree()
+        const treeUpdate = { ...tree, name: 'TESTE' }
+
+        mockingoose(model).toReturn(new mongoose.Error(), 'findOneAndUpdate')
+
+        const response = await request(app)
+            .put('/trees')
+            .send(treeUpdate)
+
+        expect(response.status).toBe(402)
+        expect(response.body).toHaveProperty('error', 'Error to update tree')
         done()
     })
 })

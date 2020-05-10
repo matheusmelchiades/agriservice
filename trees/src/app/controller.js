@@ -56,3 +56,23 @@ module.exports.get = async (request, response) => {
         return response.status(500).json({ error: 'Error internaval' })
     }
 }
+
+module.exports.put = async (request, response) => {
+
+    try {
+
+        const payload = request.body
+
+        const tree = await model.findByIdAndUpdate({ _id: payload._id }, payload)
+
+        return response.json(tree)
+
+    } catch (err) {
+
+        if (err instanceof mongoose.Error) {
+            return response.status(402).json({ error: 'Error to update tree' })
+        }
+
+        return response.status(500).json({ error: 'Error internaval' })
+    }
+}
