@@ -22,7 +22,7 @@ module.exports.getSpecies = async (request, response) => {
 
         const specieResponse = await speciesService.getSpecies(query)
 
-        return response.json(specieResponse.data)
+        return response.json(specieResponse.data || {})
 
     } catch (err) {
 
@@ -40,9 +40,9 @@ module.exports.getTrees = async (request, response) => {
     try {
         const { query } = request
 
-        const specieResponse = await treesService.getTrees(query)
+        const treeResponse = await treesService.getTrees(query)
 
-        return response.json(specieResponse.data)
+        return response.json(treeResponse.data)
 
     } catch (err) {
 
@@ -60,9 +60,9 @@ module.exports.getGroves = async (request, response) => {
     try {
         const { query } = request
 
-        const specieResponse = await grovesService.getGroves(query)
+        const grovesResponse = await grovesService.getGroves(query)
 
-        return response.json(specieResponse.data)
+        return response.json(grovesResponse.data)
 
     } catch (err) {
 
@@ -80,9 +80,9 @@ module.exports.getHarvests = async (request, response) => {
     try {
         const { query } = request
 
-        const specieResponse = await harvestsService.getHarvests(query)
+        const harvestsResponse = await harvestsService.getHarvests(query)
 
-        return response.json(specieResponse.data)
+        return response.json(harvestsResponse.data)
 
     } catch (err) {
 
