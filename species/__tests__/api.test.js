@@ -51,7 +51,7 @@ describe('API', () => {
             .post('/species')
             .send(specie)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to create a specie')
         done()
     })
@@ -92,7 +92,7 @@ describe('API', () => {
             .get('/species')
             .query(pagination)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to get species')
         done()
     })
@@ -124,7 +124,7 @@ describe('API', () => {
             .put('/species')
             .send(specieUpdate)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to update species')
         done()
     })
@@ -163,7 +163,7 @@ describe('API', () => {
         const response = await request(app)
             .delete(`/species/${specie._id}`)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to delete a specie')
         done()
     })

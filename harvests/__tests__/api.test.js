@@ -56,7 +56,7 @@ describe('API', () => {
             .post('/harvests')
             .send(harvest)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to create a harvest')
         done()
     })
@@ -108,7 +108,7 @@ describe('API', () => {
             .get('/harvests')
             .query(pagination)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to get harvests')
         done()
     })
@@ -143,7 +143,7 @@ describe('API', () => {
             .put(`/harvests/${mongoose.Types.ObjectId()}`)
             .send(harvestUpdate)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Harvest not found!')
         done()
     })
@@ -161,7 +161,7 @@ describe('API', () => {
             .put(`/harvests/${harvest._id}`)
             .send(harvestUpdate)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to update harvests')
         done()
     })
@@ -200,7 +200,7 @@ describe('API', () => {
         const response = await request(app)
             .delete(`/harvests/${harvest._id}`)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to delete a harvest')
         done()
     })

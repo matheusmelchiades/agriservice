@@ -55,7 +55,7 @@ describe('API', () => {
             .post('/groves')
             .send(grove)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to create a grove')
         done()
     })
@@ -96,7 +96,7 @@ describe('API', () => {
             .get('/groves')
             .query(pagination)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to get groves')
         done()
     })
@@ -128,7 +128,7 @@ describe('API', () => {
             .put('/groves')
             .send(groveUpdate)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to update groves')
         done()
     })
@@ -167,7 +167,7 @@ describe('API', () => {
         const response = await request(app)
             .delete(`/groves/${grove._id}`)
 
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('error', 'Error to delete a grove')
         done()
     })

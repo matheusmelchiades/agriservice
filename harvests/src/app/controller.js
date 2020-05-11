@@ -26,7 +26,7 @@ module.exports.post = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(500).json({ error: 'Error to create a harvest' })
+            return response.status(400).json({ error: 'Error to create a harvest' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -50,7 +50,7 @@ module.exports.get = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(500).json({ error: 'Error to get harvests' })
+            return response.status(400).json({ error: 'Error to get harvests' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -65,14 +65,18 @@ module.exports.put = async (request, response) => {
 
         const harvest = await model.findByIdAndUpdate({ _id: id }, payload)
 
-        if (!harvest) return response.status(40500json({ error: 'Harvest not found!' })
+        if (!harvest) throw new mongoose.Error('Harvest not found!')
 
         return response.json({ message: 'Harvest updated with success!' })
 
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(500).json({ error: 'Error to update harvests' })
+            const responseError = {
+                error: err.message || 'Error to update harvests'
+            }
+
+            return response.status(400).json(responseError)
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -87,14 +91,18 @@ module.exports.delete = async (request, response) => {
 
         const deleted = await model.findOneAndDelete({ _id: id })
 
-        if (!deleted) return response.status(400).json({ error: 'Harvest not found!' })
+        if (!deleted) throw new mongoose.Error('Harvest not found!')
 
         return response.json({ message: 'Harvest deleted with success!' })
 
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(500).json({ error: 'Error to delete a harvest' })
+            const responseError = {
+                error: err.message || 'Error to delete a harvest'
+            }
+
+            return response.status(400).json(responseError)
         }
 
         return response.status(500).json({ error: 'Error internaval' })
