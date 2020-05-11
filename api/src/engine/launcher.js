@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const config = require('../config/server')
 const routes = require('../app/api/routes')
+const cors = require('cors')
 
 const app = express()
 
@@ -12,6 +13,7 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan('dev'))
 }
 
+app.use(cors())
 app.use(express.json())
 app.use(routes)
 
