@@ -1,7 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const config = require('../config/server')
-const routes = require('../app/routes')
+const routes = require('../app/api/routes')
 
 const app = express()
 
