@@ -26,7 +26,7 @@ module.exports.post = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(402).json({ error: 'Error to create a grove' })
+            return response.status(500).json({ error: 'Error to create a grove' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -50,7 +50,7 @@ module.exports.get = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(402).json({ error: 'Error to get groves' })
+            return response.status(500).json({ error: 'Error to get groves' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -70,7 +70,7 @@ module.exports.put = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(402).json({ error: 'Error to update groves' })
+            return response.status(500).json({ error: 'Error to update groves' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -92,7 +92,7 @@ module.exports.delete = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(402).json({ error: 'Error to delete a grove' })
+            return response.status(500).json({ error: 'Error to delete a grove' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })

@@ -26,7 +26,7 @@ module.exports.post = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(402).json({ error: 'Error to create a harvest' })
+            return response.status(500).json({ error: 'Error to create a harvest' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -50,7 +50,7 @@ module.exports.get = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(402).json({ error: 'Error to get harvests' })
+            return response.status(500).json({ error: 'Error to get harvests' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -65,14 +65,14 @@ module.exports.put = async (request, response) => {
 
         const harvest = await model.findByIdAndUpdate({ _id: id }, payload)
 
-        if (!harvest) return response.status(402).json({ error: 'Harvest not found!' })
+        if (!harvest) return response.status(40500json({ error: 'Harvest not found!' })
 
         return response.json({ message: 'Harvest updated with success!' })
 
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(402).json({ error: 'Error to update harvests' })
+            return response.status(500).json({ error: 'Error to update harvests' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
@@ -94,7 +94,7 @@ module.exports.delete = async (request, response) => {
     } catch (err) {
 
         if (err instanceof mongoose.Error) {
-            return response.status(402).json({ error: 'Error to delete a harvest' })
+            return response.status(500).json({ error: 'Error to delete a harvest' })
         }
 
         return response.status(500).json({ error: 'Error internaval' })
