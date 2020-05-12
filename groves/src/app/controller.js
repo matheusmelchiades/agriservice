@@ -39,11 +39,11 @@ module.exports.get = async (request, response) => {
 
         const { page = 1, limit = 10 } = request.query
 
-        const skipper = (page - 1) * limit
+        const skipper = Number((page - 1) * limit)
         const count = await model.count()
         const groves = await model.find()
             .skip(skipper >= 0 ? skipper : 0)
-            .limit(limit)
+            .limit(Number(limit))
 
         return response.json({ count, data: groves || [] })
 
