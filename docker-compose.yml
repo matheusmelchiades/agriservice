@@ -1,6 +1,19 @@
 version: "3"
 
 services:
+  api:
+    container_name: api
+    build: ./api
+    restart: "always"
+    env_file: ./api/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - species
+      - trees
+      - groves
+      - harvests
+
   # SPECIES SERVICES
   species:
     container_name: species
